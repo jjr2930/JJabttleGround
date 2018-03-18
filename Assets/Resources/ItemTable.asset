@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 867a759426e0b8a4ea34cbc0e8a04ca4, type: 3}
+  m_Name: ItemTable
+  m_EditorClassIdentifier: 
+  weaponItems:
+  - itemType: 1
+    index: 1
+    backpackAmount: 1
+    iconPath: 
+    bulletType: 2
+    magazineCapacity: 30
+  backpackItems: []
+  helmetItems: []
+  amourItems: []
+  bulletItems: []
+  bandageItems: []
+  medicineItems:
+  - itemType: 0
+    index: 0
+    backpackAmount: 0
+    iconPath: 
+    castingTime: 0
+    healingPerSec: 0
+    gageAmount: 0

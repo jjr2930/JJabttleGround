@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "com.unity.modules.wind": "exclude",
+    "com.unity.modules.ar": "exclude",
+    "com.unity.modules.cloth": "exclude",
+    "com.unity.ads": "2.0.4",
+    "com.unity.analytics": "2.0.15",
+    "com.unity.modules.facebook": "exclude",
+    "com.unity.modules.gamecenter": "exclude",
+    "com.unity.modules.terrain": "exclude",
+    "com.unity.modules.vr": "exclude",
+    "com.unity.modules.xr": "exclude",
+    "com.unity.modules.physics": "exclude",
+    "com.unity.modules.vehicles": "exclude",
+    "com.unity.assetbundlebrowser": "1.5.0"
+  }
+}
