@@ -8,9 +8,10 @@ public class BackpackElementUIController : MonoBehaviour
     [SerializeField]    Text    txt = null;
 
 
-    public void SetMember(string spriteName, string text )
+    public void SetMember(string spritePath, string text )
     {
-        img.sprite = Resources.Load( spriteName ) as Sprite;
+        Sprite loaded = Resources.Load( spritePath, typeof(Sprite) ) as Sprite;
+        img.sprite = loaded;
         txt.text = text;
     }
 }

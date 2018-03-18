@@ -13,9 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponItems:
   - itemType: 1
+    itemName: AK74
     index: 1
-    backpackAmount: 1
-    iconPath: 
+    backpackAmount: 10
+    iconPath: Art/Weapons/Guns/AK74
     bulletType: 2
     magazineCapacity: 30
   backpackItems: []
@@ -25,6 +26,7 @@ MonoBehaviour:
   bandageItems: []
   medicineItems:
   - itemType: 0
+    itemName: 
     index: 0
     backpackAmount: 0
     iconPath: 

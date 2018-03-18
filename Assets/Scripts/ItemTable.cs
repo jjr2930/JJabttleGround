@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using CONST;
+using System.Collections.ObjectModel;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,10 +10,11 @@ using UnityEditor;
 [System.Serializable]
 public partial class ItemData
 {
-    [SerializeField] protected eItemType   itemType        = eItemType.None;
-    [SerializeField] protected int         index           = 0;
-    [SerializeField] protected int         backpackAmount  = 0;
-    [SerializeField] protected string      iconPath        = "";
+    [SerializeField] protected eItemType    itemType        = eItemType.None;
+    [SerializeField] protected string       itemName        = "";
+    [SerializeField] protected int          index           = 0;
+    [SerializeField] protected int          backpackAmount  = 0;
+    [SerializeField] protected string       iconPath        = "";
 
     #region Properties
     public eItemType ItemType
@@ -49,6 +51,19 @@ public partial class ItemData
         set
         {
             iconPath = value;
+        }
+    }
+
+    public string ItemName
+    {
+        get
+        {
+            return itemName;
+        }
+
+        set
+        {
+            itemName = value;
         }
     }
     #endregion
@@ -284,8 +299,16 @@ public class ItemTable : ScriptableObject, ISerializationCallbackReceiver
     [SerializeField]    List<BandageItem>   bandageItems    = new List<BandageItem>();
     [SerializeField]    List<MedicineItem>  medicineItems   = new List<MedicineItem>();
 
+    ReadOnlyDictionary<eItemType, ReadOnlyDictionary<int, ItemData>> dicItemTable = null;
     #region Properties
-    public Dictionary<eItemType, Dictionary<int, ItemData>> DicItemTable { get; } = new Dictionary<eItemType, Dictionary<int, ItemData>>();
+    public ReadOnlyDictionary<eItemType, ReadOnlyDictionary<int, ItemData>> DicItemTable
+    {
+        get
+        {
+            return dicItemTable;
+        }
+    }
+
 
     public List<WeaponItem> WeaponItems
     {
@@ -401,37 +424,42 @@ public class ItemTable : ScriptableObject, ISerializationCallbackReceiver
 
     public void OnAfterDeserialize()
     {
-        DicItemTable.Clear();
+        var dicWeapon   = PushToDictionary( weaponItems );
+        var dicBackpack = PushToDictionary( backpackItems );
+        var dicHelmet   = PushToDictionary( helmetItems );
+        var dicAmour    = PushToDictionary( amourItems );
+        var dicBullet   = PushToDictionary( bulletItems );
+        var dicBandage  = PushToDictionary( bandageItems );
+        var dicMedicine = PushToDictionary( medicineItems );
 
-        PushToDictionary( weaponItems );
-        PushToDictionary( backpackItems );
-        PushToDictionary( helmetItems );
-        PushToDictionary( amourItems );
-        PushToDictionary( bulletItems );
-        PushToDictionary( bandageItems );
-        PushToDictionary( medicineItems );
+        Dictionary<eItemType, ReadOnlyDictionary<int, ItemData>> dicTempTable = new Dictionary<eItemType, ReadOnlyDictionary<int, ItemData>>();
+
+        dicTempTable.Add( eItemType.Weapon,     dicWeapon );
+        dicTempTable.Add( eItemType.Backpack,   dicBackpack);
+        dicTempTable.Add( eItemType.Helmet,     dicHelmet );
+        dicTempTable.Add( eItemType.Amour,      dicAmour);
+        dicTempTable.Add( eItemType.Bullet,     dicBullet);
+        dicTempTable.Add( eItemType.Bandage,    dicBandage );
+        dicTempTable.Add( eItemType.Medicine,   dicMedicine);
+
+        dicItemTable = new ReadOnlyDictionary<eItemType, ReadOnlyDictionary<int, ItemData>>( dicTempTable );
     }
 
-    public void PushToDictionary<T>(List<T> itemTable) where T : ItemData
+    ReadOnlyDictionary<int,ItemData> PushToDictionary<T>(List<T> itemTable) where T : ItemData
     {
+        Dictionary<int, ItemData> newDic = new Dictionary<int, ItemData>();
+
         for( int i = 0; i < itemTable.Count; ++i )
         {
-            Dictionary<int, ItemData> foundedDic = null;
-
-            if( !DicItemTable.TryGetValue( itemTable[ i ].ItemType, out foundedDic ) )
-            {
-                foundedDic = new Dictionary<int, ItemData>();
-
-                DicItemTable.Add( itemTable[ i ].ItemType, foundedDic );
-            }
-
-            foundedDic.Add( itemTable[ i ].Index, itemTable[ i ] );
+            newDic.Add( itemTable[ i ].Index, itemTable[ i ] );
         }
+
+        return new ReadOnlyDictionary<int, ItemData>( newDic );
     }
 
     public T GetItem<T>(eItemType itemType, int index) where T : ItemData, new()
     {
-        Dictionary<int, ItemData> founded;
+        ReadOnlyDictionary<int, ItemData> founded;
         if( DicItemTable.TryGetValue( itemType, out founded ) )
         {
             ItemData foundedItem;
@@ -457,6 +485,7 @@ public partial class ItemData
     {
         EditorGUILayout.LabelField( this.ItemType.ToString(), GUILayout.MaxWidth( 130f ) );
         this.index = EditorGUILayout.IntField( this.index, GUILayout.MaxWidth( 130f ) );
+        this.itemName = EditorGUILayout.TextField( this.itemName, GUILayout.MaxWidth( 130f ) );
         this.backpackAmount = EditorGUILayout.IntField( this.backpackAmount, GUILayout.MaxWidth( 130f ) );
         this.iconPath = EditorGUILayout.TextField( this.iconPath, GUILayout.MaxWidth( 130f ) );
     }
@@ -465,6 +494,7 @@ public partial class ItemData
     {
         EditorGUILayout.LabelField( "", GUILayout.MaxWidth( 130f ) );
         EditorGUILayout.LabelField( "Index", GUILayout.MaxWidth( 130f ) );
+        EditorGUILayout.LabelField( "ItemName", GUILayout.MaxWidth( 130f ) );
         EditorGUILayout.LabelField( "BackpackAmount", GUILayout.MaxWidth( 130f ) );
         EditorGUILayout.LabelField( "IconPath", GUILayout.MaxWidth( 130f ) );
     }

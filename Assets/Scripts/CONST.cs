@@ -11,6 +11,7 @@ namespace CONST
         SeperateItem = 2,
         PickUpItem = 3,
         CompletePickup = 4,
+        SelectWeapon = 5,
         Count
     }
 

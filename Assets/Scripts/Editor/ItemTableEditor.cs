@@ -99,7 +99,7 @@ public class ItemTableEditor : Editor
                     EditorGUILayout.EndHorizontal();
                 }
             }
-            EditorGUILayout.BeginVertical();
+            EditorGUILayout.EndVertical();
         }    
         
         if(GUI.changed)
